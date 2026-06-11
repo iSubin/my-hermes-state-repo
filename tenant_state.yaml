@@ -1,3 +1,3 @@
-tenant_id: cmf_insurance_hermes
+tenant_id: personal_daily_hermes
 runtime_engine: hermes
 state_layout: hermes-state-v1
