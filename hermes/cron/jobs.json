@@ -1,0 +1,48 @@
+{
+  "jobs": [
+    {
+      "id": "dff71bb13242",
+      "name": "\u660e\u65e9\u559d\u6c34\u63d0\u9192",
+      "prompt": "\u63d0\u9192\u7528\u6237\u559d\u6c34\u3002\u73b0\u5728\u662f\u65e9\u4e0a9\u70b9\uff0c\u6e29\u548c\u63d0\u9192\u7528\u6237\u8be5\u559d\u4e00\u676f\u6c34\u4e86\u3002",
+      "skills": [],
+      "skill": null,
+      "model": null,
+      "provider": null,
+      "base_url": null,
+      "script": null,
+      "no_agent": false,
+      "context_from": null,
+      "schedule": {
+        "kind": "once",
+        "run_at": "2026-06-13T09:00:00+08:00",
+        "display": "once at 2026-06-13 09:00"
+      },
+      "schedule_display": "once at 2026-06-13 09:00",
+      "repeat": {
+        "times": 1,
+        "completed": 0
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-06-12T09:18:46.383746+08:00",
+      "next_run_at": "2026-06-13T09:00:00+08:00",
+      "last_run_at": null,
+      "last_status": null,
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "origin",
+      "origin": {
+        "platform": "weixin",
+        "chat_id": "o9cq807xoAM0hXFhmjcZbXNaJREI@im.wechat",
+        "chat_name": null,
+        "thread_id": null
+      },
+      "enabled_toolsets": null,
+      "workdir": null,
+      "profile": null
+    }
+  ],
+  "updated_at": "2026-06-12T09:18:46.384100+08:00"
+}
