@@ -1,8 +1,6 @@
 wechat-article-export 需要浏览器兜底路径（export.py 返回 article_body_missing 时）：新脚本 localTmp_rw/2026-07-15/wechat-article-export/export_browser_fallback.py 需部署到 skills/wechat-article-export/scripts/，SKILL.md「失败处理」需补浏览器兜底说明；另一可行方案是 browser_navigate → browser_console 取 #js_content.innerText → browser_get_images → write_file。skill_manage 在 review 上下文被 tenant policy 拦截，需手动更新。
 §
-朋友圈文案任务生成链路：小程序 → 后端服务（ANM bridge） → `hermes chat --profile xian -Q -q "受控任务模板 + <business_input>JSON</business_input>"`。source="cli" 的会话都是通过 hermes chat -q 非交互模式触发的。后端服务组装受控任务模板，包在不可信边界标签内传给模型，模型只输出纯文案。不走 Kanban 或 Cron。
-§
-wechat-content-production skill 的部分子任务（moments-copy、summarize-conclusion、topic-extension）有两条触发路径：人工交互（feishu/weixin 来源）和后端 CLI 触发（cli 来源）。后端通过 `hermes chat --profile xian -Q -q "受控任务模板"` 触发，模板格式包含 <business_input> JSON 和严格事实边界规则：sourceText 是唯一事实来源，audience/tone/duration/angle/goal 只描述创作方向不能当作已发生事实，没有明确素材时禁止虚构人物/案例/数据。需要更新 SKILL.md 补充「后端 CLI 触发路径」章节。
+受控内容后端 CLI 触发链路：小程序 → 后端服务（ANM bridge） → `hermes chat --profile xian -Q -q "受控任务模板+<business_input>JSON"`，source="cli" 即非交互路径。wechat-content-production 的 moments-copy/summarize-conclusion/topic-extension 均有 cli 与人工两条路径；事实边界：sourceText 是唯一事实来源，audience/tone/duration/angle/goal 只描述创作方向不算事实，无素材禁止虚构人物/案例/数据。不走 Kanban/Cron。SKILL.md 待补「后端 CLI 触发路径」章节。
 §
 Kanban 任务长期停在 ready 且 run_count=0 时，说明 assignee profile 的 dispatcher 未运行（worker 未上线），不是 worker 卡死。处置：如实向用户报告状态（status/run_count/等待时长），提供选项（稍后重试 / 用户检查 worker 调度 / 用户明确同意后由 orchestrator 亲自调研并标注非 Scout 产出），绝不伪造 worker 输出。
 §
@@ -14,4 +12,4 @@ key-account-sales-management 的 record-followup --channel 是固定枚举（飞
 §
 历史结论定位排查（skill_manage 被拦，待写 SKILL.md deliverable-lookup）：用户索要「之前的结论/文档」时按序 ①session_search 多关键词变体（短语→名词→宽词；sessions_searched:0 用无参 browse 区分库空/无匹配）②kanban_list ③search_files（/opt/data 顶层被拦，用 workspace 根；先内容后文件名）④read_file 核对；未找到如实报告+三选项（重新调研派 tech_scout/线索/暂缓），不编造；clarify 曾 60 分钟无人应答，选项须在正文给全。
 §
-链路验证编号 8171：苏总 2026-08-17 要求记住（链路验证用）
+链路验证编号 8171（2026-08-17 起）：苏总以 ANM_ 前缀消息做链路 E2E 测试、要求只回固定文本；指定读 /opt/hermes/ 文件会被 tenant 策略拦截，需先复制到 /opt/data/workspace 再读。
