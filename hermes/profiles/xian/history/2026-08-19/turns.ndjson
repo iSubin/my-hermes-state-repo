@@ -1,0 +1,1 @@
+{"schema":"hermes.static.turn.v1","ts":"2026-08-19T08:39:00.228680+00:00","tenant_id":"xianyu_tech","profile":"xian","platform":"feishu","session_id":"20260725_083042_cfaaec88","turn_id":"20260725_083042_cfaaec88:20260725_083042_cfaaec88:98517b64","status":"completed","user":{"text":"ANM_HERMES_0204_E2E_20260819：请只回复“0.20.4 链路正常”。"},"assistant":{"text":"0.20.4 链路正常"}}
