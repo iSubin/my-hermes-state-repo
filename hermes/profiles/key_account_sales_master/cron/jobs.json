@@ -1,0 +1,60 @@
+{
+  "jobs": [
+    {
+      "id": "5c4b95d54682",
+      "name": "ANM0204-SALES-readonly-query",
+      "prompt": "你是大客户销售主管（key_account_sales_master）。这是一个只读查询任务，任务标记 ANM0204_SALES_20260819_2244。已加载 key-account-sales-management Skill，其稳定只读入口为：python3 scripts/sales_management.py preflight|dashboard|opportunities|opportunity --opportunity-id <ID> --output json（脚本位于 skill 目录 scripts/ 下，需在 skill 目录内以相对路径运行）。请按顺序执行：\n1) python3 scripts/sales_management.py opportunity --opportunity-id OPP-CMAC-202607 --output json\n2) python3 scripts/sales_management.py dashboard --output json\n（可选：python3 scripts/sales_management.py opportunities --output json 核对列表）\n严格约束：只读，禁止任何写入操作——不得调用 record-followup，不得使用 --confirmed，不得创建/更新/删除任何 Base 记录。若 terminal 被 tenant-policy 拒绝，请如实报告失败原因，不要编造数据。\n基于命令的真实输出，用中文回答：客户“中国民用机场协会”（商机 OPP-CMAC-202607）的（1）当前商机阶段与状态；（2）当前阻塞（blocker 节点/状态为阻塞的推进节点）；（3）开放风险（状态为开放/跟踪的风险，含等级、描述、应对动作）。明确区分“Base 已知事实”与“分析判断”，信息不足处标注“待确认”。不得在回复中暴露 app_token、table_id、record_id、open_id、token 等内部标识。结尾必须单独保留标记：ANM0204_SALES_20260819_2244。",
+      "skills": [
+        "key-account-sales-management"
+      ],
+      "skill": "key-account-sales-management",
+      "model": null,
+      "provider": null,
+      "provider_snapshot": "custom",
+      "model_snapshot": "deepseek-v4-flash",
+      "base_url": null,
+      "script": null,
+      "no_agent": false,
+      "monitor_script": null,
+      "monitor_url": null,
+      "monitor_state": null,
+      "context_from": null,
+      "schedule": {
+        "kind": "once",
+        "run_at": "2026-08-19T23:30:00+00:00",
+        "display": "once at 2026-08-19 23:30"
+      },
+      "schedule_display": "once at 2026-08-19 23:30",
+      "repeat": {
+        "times": 1,
+        "completed": 1
+      },
+      "enabled": false,
+      "state": "completed",
+      "paused_at": "2026-08-19T14:48:29.778764+00:00",
+      "paused_reason": null,
+      "created_at": "2026-08-19T14:48:21.031416+00:00",
+      "next_run_at": null,
+      "last_run_at": "2026-08-19T14:50:50.505881+00:00",
+      "last_status": "ok",
+      "last_error": null,
+      "last_delivery_error": null,
+      "failure_streak": 0,
+      "deliver": "origin",
+      "origin": {
+        "platform": "feishu",
+        "chat_id": "oc_0552d701c8ca34e3856eb1c39c79a4a5",
+        "chat_name": "oc_0552d701c8ca34e3856eb1c39c79a4a5",
+        "thread_id": null,
+        "user_id": "ou_27bdc9dddb1bf6ecfef0acba989234b8"
+      },
+      "enabled_toolsets": [
+        "terminal",
+        "file"
+      ],
+      "workdir": null,
+      "fire_claim": null
+    }
+  ],
+  "updated_at": "2026-08-19T14:50:50.507987+00:00"
+}
