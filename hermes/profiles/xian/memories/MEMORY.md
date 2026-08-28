@@ -8,7 +8,7 @@ tenant 终端策略：拒绝 `&&` 拼接命令、拒绝带 workdir 的相对路�
 §
 key-account-sales-management 查询技巧：`opportunity --opportunity-id` 一次返回商机+客户+关系人+推进节点+风险+跟进全量快照；查「阶段/负责人/下一步/开放风险」单次调用即可，只读命令无需 --confirmed。该技巧待写入 SKILL.md（skill_manage 被 tenant policy 阻止）。
 §
-key-account-sales-management 的 record-followup --channel 是固定枚举（飞书会议/微信/电话/面谈/邮件/其他），用户输入「飞书」等非枚举值必须先映射到最贴近枚举（如「飞书会议」），否则报 INVALID_INPUT「沟通渠道不受支持」；SKILL.md 待手动补充该 pitfall。本 tenant 终端白名单拦截 &&、;、date、python3 -c：调用 sales_management.py 必须用绝对路径单命令；取当前时间用 dashboard 的 asOf 字段（服务端 UTC，北京=UTC+8）。
+本 tenant 终端白名单拦截 &&、;、date、python3 -c、grep、管道 |：调用 Skill 脚本必须用绝对路径单命令（一次一条）；取当前时间用 dashboard 的 asOf 字段（服务端 UTC，北京=UTC+8）。
 §
 历史结论定位排查（skill_manage 被拦，待写 SKILL.md deliverable-lookup）：用户索要「之前的结论/文档」时按序 ①session_search 多关键词变体（短语→名词→宽词；sessions_searched:0 用无参 browse 区分库空/无匹配）②kanban_list ③search_files（/opt/data 顶层被拦，用 workspace 根；先内容后文件名）④read_file 核对；未找到如实报告+三选项（重新调研派 tech_scout/线索/暂缓），不编造；clarify 曾 60 分钟无人应答，选项须在正文给全。
 §

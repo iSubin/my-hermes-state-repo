@@ -1,3 +1,5 @@
-xianyu_tech 运行时（DM 会话）：terminal 受 tenant-policy 白名单限制（sales_management.py 各种调用形式均被拒）、execute_code 被拒、file 工具仅限 /opt/data/workspace、cron 的 script 参数要求脚本位于 ~/.hermes/scripts/（file 工具写不到）。直接执行被拒时的通道：cronjob LLM 委派（create 带 skills + 自包含 prompt → action=run → 立即 pause 防定时 tick 重复），或 kanban worker 会话（spawned 会话有更宽白名单，曾成功运行 python3 scripts/sales_management.py <cmd> --output json）。每次会话用一次廉价探针重新验证，勿固化'工具不可用'结论。
+xianyu_tech 运行时（key_account_sales_master DM 会话，2026-08-29 实测）：terminal 仅放行 workdir=skill 目录下的 `python3 scripts/sales_management.py <子命令> <参数>`（&&、|、grep、python3 -c、绝对路径脚本均被拒）；read_file 放行 profile skills 目录树；write_file 仅限 /opt/data/profiles/key_account_sales_master/workspace/；skill_manage、execute_code 被拒（denied tool）；cronjob、kanban_list 可用。每会话用一次 preflight 廉价探针复核，勿固化不可用结论；Base 链接无法从该会话沙箱生成，需经用户/小程序侧获取。
 §
 大客户销售 Base 业务映射：中国民用机场协会 ↔ 商机 OPP-CMAC-202607（Base 唯一商机；2026-08-18 kanban 冒烟快照：需求确认/进行中/高优先级，1客户+3关系人+3节点+2风险+5跟进）。kanban run metadata 中的快照仅作带 asOf 时间戳的次级证据，当前事实以 Base 实时查询为准，禁止以旧快照充当当前状态。
+§
+大客户销售验收写入约定（skill_manage 被租户策略拒，暂存 memory 待落盘 key-account-sales-management skill）：幂等键由任务ID派生 followup-<task-id>（须匹配 ^[A-Za-z0-9._:-]{8,120}$）；channel 枚举{飞书会议,微信,电话,面谈,邮件,其他}、source{feishu_im,wechat_workbench,admin,import}；summary 加任务ID前缀溯源；用户IM明确授权即视为已确认，可传 --confirmed；写入后回读商机详情验证记录置顶与上次跟进更新；多维表格链接沙箱不可得时禁止编造，给小程序/飞书工作区替代路径。
