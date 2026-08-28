@@ -1,4 +1,54 @@
 {
-  "jobs": [],
-  "updated_at": "2026-07-25T22:25:24.584764+08:00"
+  "jobs": [
+    {
+      "id": "e64b1da94ba8",
+      "name": "李女士跟进复盘提醒",
+      "prompt": "提醒苏斌：现在复盘保险客户李女士的跟进情况。请检查以下几点是否已补齐：1) 夫妻已有商业保单详情；2) 家庭保险预算区间；3) 健康告知相关信息（本人及丈夫既往症、家族病史、父母健康状况）。如果这些信息已补齐，输出下一步可执行的方案方向（保守版/进阶版）；如果尚未补齐，列出待确认问题清单并给出如何推进客户补齐信息的建议。以简洁、专业的口吻回复。",
+      "skills": [],
+      "skill": null,
+      "model": null,
+      "provider": null,
+      "provider_snapshot": "custom",
+      "model_snapshot": "deepseek-v4-flash",
+      "base_url": null,
+      "script": null,
+      "no_agent": false,
+      "monitor_script": null,
+      "monitor_url": null,
+      "monitor_state": null,
+      "context_from": null,
+      "schedule": {
+        "kind": "once",
+        "run_at": "2026-08-30T17:00:00+00:00",
+        "display": "once at 2026-08-30 17:00"
+      },
+      "schedule_display": "once at 2026-08-30 17:00",
+      "repeat": {
+        "times": 1,
+        "completed": 0
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-08-28T20:04:52.303532+00:00",
+      "next_run_at": "2026-08-30T17:00:00+00:00",
+      "last_run_at": null,
+      "last_status": null,
+      "last_error": null,
+      "last_delivery_error": null,
+      "failure_streak": 0,
+      "deliver": "origin",
+      "origin": {
+        "platform": "feishu",
+        "chat_id": "oc_e1a868bc8dc6589e04d0491e4b1475b7",
+        "chat_name": "oc_e1a868bc8dc6589e04d0491e4b1475b7",
+        "thread_id": null,
+        "user_id": "ou_a2d5c754e84c2be50d8065ee2a4732f8"
+      },
+      "enabled_toolsets": null,
+      "workdir": null
+    }
+  ],
+  "updated_at": "2026-08-28T20:04:52.311888+00:00"
 }
