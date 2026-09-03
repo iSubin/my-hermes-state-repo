@@ -1,15 +1,17 @@
-wechat-article-export 失败兜底：export.py 返回 article_body_missing（页面无 #js_content，疑似微信反爬/验证页）时需浏览器真实渲染。当前 tenant 只暴露 browser_exec，且要求宿主机 Chrome 已运行，否则报 chrome-not-running；历史备用方案 browser_navigate→browser_console 取 #js_content.innerText→browser_get_images→write_file 在当前会话不可用。已有 localTmp_rw/2026-07-15/wechat-article-export/export_browser_fallback.py 待部署到 skills/wechat-article-export/scripts/，SKILL.md「失败处理」待补；execute_code、curl、workspace 下脚本均被 tenant 白名单拦截，仅 skills/ 目录内脚本可直接执行。
+wechat-article-export 兑底：export.py 返 article_body_missing（无 #js_content，疑似反爬）需浏览器渲染；tenant 仅 browser_exec 且需宿主机 Chrome 运行中，否则 chrome-not-running；fallback 部署与 SKILL.md「失败处理」待补。
 §
-受控内容后端 CLI 触发链路：小程序 → 后端服务（ANM bridge） → `hermes chat --profile xian -Q -q "受控任务模板+<business_input>JSON"`，source="cli" 即非交互路径。wechat-content-production 的 moments-copy/summarize-conclusion/topic-extension 均有 cli 与人工两条路径；sourceText 是唯一事实来源，audience/tone/duration/angle/goal 只描述创作方向不算事实，无素材禁止虚构人物/案例/数据。不走 Kanban/Cron。SKILL.md 待补「后端 CLI 触发路径」章节。
+受控内容 CLI 链路：小程序→后端（ANM bridge）→`hermes chat --profile xian -Q -q "模板+JSON"`（source=cli）。wechat-content-production 的 moments-copy/summarize-conclusion/topic-extension 有 cli/人工路径；sourceText 是唯一事实来源，无素材禁虚构；不走 Kanban/Cron。
 §
-Kanban 状态判读：ready+run_count=0 = dispatcher 未运行；running+run_count=1 时 wait_all 超时≠失败，kanban_show events（心跳/附件）确认存活后继续 bounded wait（≤600s）。tech_scout 沙箱中 Chrome 无法启动、terminal/网络/附件读被禁，只能用 kanban_attach_url 证明 URL 可达；限制须原样转述、不伪造输出。kanban-orchestrator SKILL.md 待补（skill_manage 被 tenant policy 拦）。
+Kanban 判读：ready+run_count=0=dispatcher 未运行；running+run_count=1 时 wait_all 超时≠失败，kanban_show events 确认存活后 bounded wait（≤600s）。worker 沙箱限制原样转述、不伪造输出。
 §
-key-account-sales-management：`opportunity --opportunity-id` 一次返回商机+客户+关系人+推进节点+风险+跟进全量快照；查阶段/负责人/下一步/开放风险单次调用即可，只读命令无需 --confirmed。record-followup --channel 为固定枚举（飞书会议/微信/电话/面谈/邮件/其他），非枚举值先映射（“飞书”→“飞书会议”）否则 INVALID_INPUT。两项技巧待写入 SKILL.md（skill_manage 被 tenant policy 阻止）。
+key-account-sales-management：`opportunity --opportunity-id` 一次返回商机+客户+关系人+节点+风险+跟进全量快照，只读无需 --confirmed。record-followup --channel 固定枚举（飞书会议/微信/电话/面谈/邮件/其他），非枚举先映射否则 INVALID_INPUT。
 §
-历史结论定位排查（skill_manage 被拦，待写 SKILL.md deliverable-lookup）：用户索要「之前的结论/文档」时按序 ①session_search 多关键词变体（短语→名词→宽词；sessions_searched:0 用无参 browse 区分库空/无匹配）②kanban_list ③search_files（/opt/data 顶层被拦，用 workspace 根；先内容后文件名）④read_file 核对；未找到如实报告+三选项（重新调研派 tech_scout/线索/暂缓），不编造；clarify 曾 60 分钟无人应答，选项须在正文给全。
+历史结论定位排查：索要「之前的结论/文档」按序 ①session_search 多关键词变体（短语→名词→宽词；sessions_searched:0 用无参 browse 区分空库/无匹配）②kanban_list ③search_files（/opt/data 顶层被拦用 workspace 根）④read_file 核对；未找到如实报告+三选项（重调研派 tech_scout/线索/暂缓），不编造。
 §
-链路验证编号 8171（2026-08-17 起）：苏总以 ANM_/ANM_3END_ 前缀消息做 E2E 测试；纯文本类只回固定文本，BIZ/SKILL 类须真实执行业务并保留 marker。2026-08-28 起 E2E_XIAN_ 生产三端验收覆盖 PRD/TRAIN/WXEXPORT/WXCONTENT/GEO_ARTICLE/GEO_KB/GEO_PAGE/WXPUBLISH：须执行 Skill 自带脚本并落盘产物到 localTmp_rw；发布链路停在确认卡片等真人点击，不自行 confirm、不复用 interaction_id；阻断如实报 BLOCKED，不把 preflight 算成功；读 /opt/hermes/ 被拦时先复制到 workspace。
+链路验证（8171 起）：苏总以 ANM_（ANM_3END_WEIXIN_SMOKE_*）、WX0204_E2E_/TYPING_、E2E_XIAN_ 前缀做 E2E 测试：纯文本只回固定文本，带指令按指令限答（如两句话说明），无指令测试消息正常回应并拉回正题；BIZ/SKILL 类须真实执行落盘 localTmp_rw；发布停在确认卡等真人；阻断如实报 BLOCKED；读 /opt/hermes/ 被拦先复制到 workspace。
 §
-tenant 终端策略：拒绝 &&、;、管道、date、grep、python3 -c、execute_code，也拒绝带 workdir 的相对路径脚本调用；Skill 脚本用绝对路径单命令调用（如 python3 /opt/data/skills/key-account-sales-management/scripts/sales_management.py ...）。取当前时间用 dashboard asOf（服务端 UTC，北京=UTC+8）。terminal/read_file/write_file/search_files/xian_card_confirm 等延迟工具须先 tool_describe 再经 tool_call 调用；tool 名称必须是顶层 `name` 参数，放入 arguments 会报 `cannot invoke bridge tool`，直接调用未加载工具则报 `Tool does not exist`。
+tenant 终端策略：拒绝 &&、;、管道、date、grep、python3 -c、execute_code 及带 workdir 相对路径脚本；Skill 脚本用绝对路径单命令。当前时间取 dashboard asOf（UTC，北京+8）。terminal/read_file/write_file/search_files/xian_card_confirm 等延迟工具须先 tool_describe 再 tool_call；tool 名称须在顶层 name 参数。
 §
-wechat-article-publish E2E 实测（2026-08-29，待写 SKILL.md）：render 实际输出 skill_outputs/wechat-article-publish/{SLUG}_article.html（相对 workspace 根，无 wechat/ 子目录），validate 前先 search_files 定位；extract 的 title 取自文件名 slug 而非 H1，卡片/publish 需显式 --title；确认卡须带 preview.url，缺审核链接先 feishu-doc-create 生成；publish ok=True 但 draft_id 空属正常（上游未回传）；无源或不匹配 interaction_id 的 confirm_publish 回调不执行发布，先澄清；save-artifact 归档日期以脚本解析和 local_path 为准。
+wechat-article-publish 实测（2026-08-29/31，skill_manage 被拦 SKILL.md 待补）：render 默认输出 CWD 相对 skill_outputs/...（workspace 根 search_files 找不到），必须显式 --output-dir 绝对路径到 localTmp_rw/YYYY-MM-DD/wechat-publish，validate/cover/publish 全程用该绝对路径；SKILL 旧文档的 skill_outputs/.../wechat/ 子目录路径不存在。extract title 取 slug 非 H1，卡片/publish 需显式 --title；确认卡须带 preview.url（缺则 feishu-doc-create 生成）；publish ok 但 draft_id 空属正常；无源或不匹配 interaction_id 的 confirm 不发布先澄清；E2E/复测任务点「取消发布」=预期验证成功路径，如实汇报取消、不自行发布。
+§
+wechat-content-production 命题创作路径（skill_manage 被拦 SKILL.md 待补）：用户直接给主题+风格约束且 list-search 无对标时，不强索对标文章——按写作规范起草后 init（可不带 --search-record-id，实测可跑）→ save --task-dir --step 3 直接成稿；消息内约束就地当 6 问答案；产物落 localTmp_rw/YYYY-MM-DD/wechat-content-production/。
